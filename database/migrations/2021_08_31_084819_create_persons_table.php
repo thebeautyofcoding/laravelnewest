@@ -33,6 +33,19 @@ class CreatePersonsTable extends Migration
                 ->on('firmen')
                 
                 ->onDelete('cascade');
+
+                 $table
+                ->bigInteger('photo')
+                ->nullable()
+                ->unsigned();
+            $table
+
+            ->foreign('photo')
+            ->references('id')
+            ->on('photos')
+            
+            ->onDelete('cascade');
+               
         });
     }
 
@@ -43,6 +56,10 @@ class CreatePersonsTable extends Migration
      */
     public function down()
     {
+        Schema::table('persons', function (Blueprint $table) {
+            $table->dropForeign('photo');
+            $table->dropForeign('firma');
+        });
         Schema::dropIfExists('persons');
     }
 }
