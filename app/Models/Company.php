@@ -14,7 +14,7 @@ class Company extends Model
     protected $fillable=['name', 'unterzeile', 'strasse', 'hausnummer', 'plz', 'ort', 'web', 'fax', 'telefon'];
    
     public function person(){
-        return $this->hasMany('App\Models\Person');
+        return $this->hasMany('App\Models\Person', 'firma');
 
     }
 

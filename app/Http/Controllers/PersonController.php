@@ -13,6 +13,9 @@ class PersonController extends Controller
     {
         $limit = 5;
         $persons = Person::orderBy('id','DESC')->paginate($limit);
+     
+
+        
 
         $totalNumberOfPersons = Person::all()->count();
         $totalNumberOfPages = ceil($totalNumberOfPersons / $limit);
@@ -65,6 +68,7 @@ class PersonController extends Controller
 
     public function ajaxListPersons(Request $request)
     {
+     
         $currentPage = $request->query('page');
 
         
@@ -140,6 +144,7 @@ class PersonController extends Controller
 
     public function ajaxSearchAction(Request $request)
     {
+       
         $currentPage = $request->query('page');
         $query = $request->input('query');
         $personProperty = $request->query('personProperty');
@@ -158,13 +163,20 @@ class PersonController extends Controller
         }
 
         $offset = $currentPage * $limit;
-
-        $persons = Person::where(
-            $personProperty,
-            'LIKE',
-            '%' . $query . '%'
-        )->paginate($limit);
-
+        $persons=NULL;
+        if($query){
+            $persons = Person::where(
+                $personProperty,
+                'LIKE',
+                '%' . $query . '%'
+            )->paginate($limit);
+         
+        }else{
+         
+            $persons=Person::all();
+        }
+        
+      
         $totalNumberOfPersons = DB::table('persons')
             ->where($personProperty, 'LIKE', '%' . $query . '%')
             ->count();
@@ -205,7 +217,7 @@ class PersonController extends Controller
         foreach ($persons as $person) {
             $person->firma = $person->company;
         }
-
+      
         $limits = [1, 2, 5, 10];
         return response()->json([
             'persons' => $persons,
@@ -260,5 +272,15 @@ class PersonController extends Controller
             'latestPerson'=>$person]
         );
 
+    }
+
+
+    public function showPerson($id){
+      
+        $person=Person::find($id);
+       
+        return response()->json([
+            'person'=>$person
+        ]);
     }
 }

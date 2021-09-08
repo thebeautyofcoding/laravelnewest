@@ -15,10 +15,13 @@ use App\Http\Controllers\CompanyController;
 */
 
 Route::get('/persons', [PersonController::class, 'listPersons']);
+Route::get('/personsSearch', [PersonController::class, 'ajaxSearchAction']);
+
+
 
 Route::get('/ajax/persons', [PersonController::class, 'ajaxListPersons']);
 
-Route::get('/persons/search', [PersonController::class, 'ajaxSearchAction']);
+
 
 Route::post('/personsDelete', [PersonController::class, 'delete']);
 
@@ -28,15 +31,26 @@ Route::get('/companies', [CompanyController::class, 'all']);
 
 Route::post('/persons/create', [PersonController::class, 'create']);
 
-
+Route::get('/persons/{id}', [PersonController::class, 'showPerson']);
 
 Route::get('/companies/paginate', [CompanyController::class, 'paginate']);
 
 Route::get('/companies/edit/{id}', [CompanyController::class, 'edit']);
+
+
+Route::get('/companies/details/{id}', [CompanyController::class, 'show']);
+
 Route::get('/companies/create', [CompanyController::class, 'create'])->name('company.create');
 Route::post('/companies/store', [CompanyController::class, 'store'])->name('company.store');
+
+
+Route::post('/companiesDelete', [CompanyController::class, 'destroy']);
 Route::patch('/companies/update', [CompanyController::class, 'update'])->name('company.update');
 
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -3,14 +3,14 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
-$(document).ready(function () {
+// Document.ready
+$(function() {
 
     $(this).on('click', ':button.personPageButton, :button#nextButton, :button#previousButton', function () {
 
         var currentPageNumber = $(this).val();
 
-        console.log(currentPageNumber)
+        
         var ajaxPageLimit = $('#ajaxPageLimit').val()
         if ($('#personProperty').val() === '' && $('#searchInput').val() === '') {
 
@@ -34,9 +34,9 @@ $(document).ready(function () {
                     $('#currentLimit').text(ajaxPageLimit)
 
 
-                    console.log(response.persons)
+                   
                     $.map(response.persons.data, function (person) {
-                        personHtml = `<tr data-id="${person.id}" class="tr">
+                        personHtml = `<tr data-id="${typeof person.id!=='undefined'?person.id:''}" class="tr">
 
 
                          <td  class="anrede">${person.anrede}</td>
@@ -45,53 +45,18 @@ $(document).ready(function () {
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
-                        <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
+                        <td value="${typeof person.firma.id!=='undefined'?person.firma.id:''}"class="firma">${typeof person.firma.name!=='undefined'?person.firma.name:''}</td>
+                        <td ><button data-id="${typeof person.id!=='undefined'?person.id:''}" data-target="#editPerson${typeof person.id!=='undefined'?person.id:''}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
 
-
-                        var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" id="id" value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede"  value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname"  value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname"   value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"   value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon"   value="${person.telefon}">
-                        <input type="text" class="form-control mb-3 handy"  value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                        $('#myTable').after(editModal)
+                        
 
                         $('tbody').append(personHtml)
                     })
 
-
-
+                   
+    
 
 
 
@@ -180,7 +145,7 @@ $(document).ready(function () {
             console.log(ajaxPageLimit)
             $.ajax({
                 type: "GET",
-                url: `persons/search?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
+                url: `personsSearch?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
 
                 success: function (response) {
                     console.log('success')
@@ -201,7 +166,7 @@ $(document).ready(function () {
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                        <td value="${typeof person.firma!==null?person.firma.id: 'kein Firma vorhanden'}"class="firma">${typeof person.firma!==null?person.firma.name: 'kein Firma vorhanden'}</td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
@@ -211,41 +176,7 @@ $(document).ready(function () {
 
 
                         $('tbody').append(personHtml)
-                        var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname" value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname" value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon"  value="${person.telefon}">
-                        <input type="text" class="form-control mb-3 handy" value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                        $('#myTable').after(editModal)
+      
                     })
 
 
@@ -307,7 +238,6 @@ $(document).ready(function () {
 
 
 
-    $(document).ready(function () {
         $('#searchInput').prop('disabled', 'disabled')
         $('#personProperty').change(function () {
 
@@ -323,7 +253,7 @@ $(document).ready(function () {
                 var limit = $('#ajaxPageLimit').val();
 
                 $.ajax({
-                    url: `persons/search?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
+                    url: `personsSearch?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
 
                     method: 'GET',
 
@@ -346,41 +276,7 @@ $(document).ready(function () {
                         </tr>`
 
 
-                            var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname" value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname" value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon" value="${person.telefon}">
-                        <input type="text" class="form-control mb-3 handy" value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                            $('#myTable').after(editModal)
+           
 
 
                             $('tbody').append(personHtml)
@@ -447,7 +343,6 @@ $(document).ready(function () {
             }
 
         })
-    })
 
     $("#searchInput").on("keyup", function () {
 
@@ -455,9 +350,9 @@ $(document).ready(function () {
         var query = $(this).val().toLowerCase().trim();
         var personProperty = $('#personProperty').val();
         var limit = $('#ajaxPageLimit').val().trim();
-        console.log(limit)
+       
         $.ajax({
-            url: 'persons/search',
+            url: 'personsSearch',
             data: {
                 'query': query,
                 'personProperty': personProperty,
@@ -478,7 +373,7 @@ $(document).ready(function () {
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                        <td value="${typeof person.firma!==null?person.firma.id: 'kein Firma vorhanden'}"class="firma">${typeof person.firma!==null?person.firma.name: 'kein Firma vorhanden'}</td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
@@ -488,41 +383,7 @@ $(document).ready(function () {
 
 
                     $('tbody').append(personHtml)
-                    var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname"value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname"  value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon"  value="${person.telefon}">
-                        <input type="text" class="form-control mb-3 handy"  value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                    $('#myTable').after(editModal)
+                
                 })
 
 
@@ -662,41 +523,8 @@ $(document).ready(function () {
                         </tr>`
 
 
-                        var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname" value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname"  value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon" value="${person.telefon}">
-                        <input type="text" class="form-control mb-3 handy" value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                        $('#myTable').after(editModal)
+                        
+                      
 
 
                         $('tbody').append(personHtml)
@@ -725,7 +553,7 @@ $(document).ready(function () {
             var limit = $('#ajaxPageLimit').val().trim();
             console.log(limit)
             $.ajax({
-                url: '/persons/search',
+                url: '/personsSearch',
                 data: {
                     'query': query,
                     'personProperty': personProperty,
@@ -790,41 +618,9 @@ $(document).ready(function () {
                         </tr>`
 
 
-                        var editModal = `
-            <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                        <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                        <input type="text" class="form-control mb-3 vorname" value="${person.vorname}">
-                        <input type="text" class="form-control mb-3 nachname"  value="${person.nachname}">
-                        <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                        <input type="text" class="form-control mb-3 telefon"  value="${person.telefon}">
-                        <input type="text" class="form-control mb-3handy"  value="${person.handy}">
-
-
-                <div id="companiesSelectMenu">
-
-                </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-
-                            `
-                        $('#myTable').after(editModal)
+             
+                            
+                        
 
                         $('tbody').append(personHtml)
                     })
@@ -896,18 +692,24 @@ $(document).ready(function () {
 
 
     })
+    
+   
 
-    $(this).on('click', '.update', function () {
-
-       
+    
+    $(this).on('click', '.update', function (e) {
+        e.preventDefault();
+        $('#modal').modal('show');
+      
         var updateButtonId = $(this).data('id')
         var companyId = $(this).parent().siblings('.firma').attr('value');
+        var selectMenuHtml;
+  
         $('#company').remove()
         $.ajax({
             url: 'companies',
             method: 'GET',
             success: function (response) {
-                var selectMenuHtml = `<select class="form-control" name="companies" id="company">
+                 selectMenuHtml = `<select class="form-control" name="companies" id="company">
                 <option value="">Bitte auswählen:</option>`;
 
                 $.each(response.companies, function () {
@@ -916,38 +718,62 @@ $(document).ready(function () {
 
                 selectMenuHtml = selectMenuHtml + `</select>`
 
-             
+                
 
-
-
-
-
-
-                $(`input[data-id="${updateButtonId}"]`).siblings('#companiesSelectMenu').append(selectMenuHtml)
-                $(`option[value='${companyId}']`).attr('selected', 'selected');
+                $('#companiesSelectMenu').append(selectMenuHtml)
+               
 
               
-                $('#editPerson').modal('show')
+               
             }
 
         })
+        
+        $.ajax({
+            
+
+            url: `persons/${updateButtonId}`,
+            method: 'GET',
+            success: function (response) {
+               
+            $('#modal h5').text(` Editiere ${response.person.vorname} ${response.person.nachname}`)
+            
+            $('#modal-idHidden').val(response.person.id);
+            $('#modal-anrede').val(response.person.anrede);
+            $('#modal-vorname').val(response.person.vorname);
+            $('#modal-nachname').val(response.person.nachname);
+            $('#modal-email').val(response.person.email);
+            $('#modal-telefon').val(response.person.telefon);
+            $('#modal-handy').val(response.person.handy);
+            $('#modal').attr('data-id', response.person.id)
+            $('#modal-updateButton').attr('data-id', response.person.id)  
+  
+     
+         
+      
+            $('#modal').modal('show')
+
+            $(`input[data-id="${updateButtonId}"]`).siblings('#companiesSelectMenu').append(selectMenuHtml)
+            $(`option[value='${companyId}']`).attr('selected', 'selected');
+            }
+        })
     })
 
-
-    $(this).on('click', '.updateButton', function () {
+    $(this).on('click', '#modal-updateButton', function () {
+        console.log($(this).data('id'))
 
         personId = $(this).data('id')
-        anrede = $(`#editPerson${personId}`).find('.anrede').val()
-        vorname = $(`#editPerson${personId}`).find('.vorname').val()
-        nachname = $(`#editPerson${personId}`).find('.nachname').val()
+        anrede = $('#modal-anrede').val()
+        vorname = $('#modal-vorname').val()
+        nachname = $('#modal-nachname').val()
 
-        email = $(`#editPerson${personId}`).find('.email').val()
-        telefon = $(`#editPerson${personId}`).find('.telefon').val()
-        handy = $(`#editPerson${personId}`).find('.handy').val()
-        firma = $(`#editPerson${personId}`).find('#company').val()
+        email = $('#modal-email').val()
+        telefon = $('#modal-telefon').val()
+        handy = $('#modal-handy').val()
+        firma = $('#company').val()
 
-        console.log($(`#editPerson${personId}`).find('.vorname').val())
-        console.log($(this).parents(`.tr[data-id="${personId}"]`).find(`#editPerson${personId}`).find('.modal-body').find('.vorname'))
+        
+    
         $.ajax({
             url: 'persons/edit',
             data: {
@@ -964,7 +790,17 @@ $(document).ready(function () {
             method: 'PATCH',
             success: function (response) {
                 $('body').removeClass('modal-open')
-                $('#editPerson').remove()
+             $('#modal h5').text(` Editiere ${response.person.vorname} ${response.person.nachname}`)
+            
+            $('#modal-idHidden').val('');
+            $('#modal-anrede').val('');
+            $('#modal-vorname').val('');
+            $('#modal-nachname').val('');
+            $('#modal-email').val('');
+            $('#modal-telefon').val('');
+            $('#modal-handy').val('');
+            $('#modal').attr('data-id', '')
+            $('#modal-updateButton').attr('data-id','')  
                 $('.modal-backdrop').remove()
 
 
@@ -1046,47 +882,14 @@ $(document).ready(function () {
               var  latestAddedRowId=$('tbody').find('tr').first()
               console.log(latestAddedRowId)
               $('body').removeClass('modal-open')
-              $('#editPerson').remove()
+             
               $('.modal-backdrop').remove()
             
                 
 
                 var person= response.latestPerson
-                var editModal = `
-                <div class="modal" id="editPerson${person.id}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Editiere ${person.vorname} ${person.nachname}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden"data-id="${person.id}" class="id"value="${person.id}">
-                            <input type="text" class="form-control mb-3 anrede" value="${person.anrede}">
-                            <input type="text" class="form-control mb-3 vorname" value="${person.vorname}">
-                            <input type="text" class="form-control mb-3 nachname"  value="${person.nachname}">
-                            <input type="text" class="form-control mb-3 email"  value="${person.email}">
-                            <input type="text" class="form-control mb-3 telefon"  value="${person.telefon}">
-                            <input type="text" class="form-control mb-3 handy"  value="${person.handy}">
-    
-    
-                    <div id="companiesSelectMenu">
-    
-                    </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-id="${person.id}" data-dismiss="modal" data-target="#editPerson${person.id}" class="btn btn-primary updateButton">Save changes</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-    
-    
-                                `
-                            $('#myTable').after(editModal)
+                
+                    
                 personHtml = `<tr class="tr latestRow"data-id="${person.id}" class="tr">
 
                 <td  class="anrede">${person.anrede}</td>

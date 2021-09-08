@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Http\Response;
 class CompanyController extends Controller
 {
 
@@ -75,7 +77,19 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+      $company= Company::find($id);
+
+      $personsWorkingForCompany= $company->person;
+
+      
+
+      $totalPersonCountCompany=$personsWorkingForCompany->count();
+      
+      return view('company.details',[
+          'persons'=> $personsWorkingForCompany,
+          'company'=>$company,
+          'totalPersons'=>$totalPersonCountCompany
+      ]);
     }
 
     /**
@@ -127,8 +141,14 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        DB::table('firmen')
+            ->whereIn('id', $request->companiesToDelete)
+            ->delete();
+
+            return \Response::json([
+                'message' => 'SUCCESS'
+            ], 200); 
     }
 }
