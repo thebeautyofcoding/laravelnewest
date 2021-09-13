@@ -12,10 +12,7 @@ class PersonController extends Controller
     public function listPersons(Request $request)
     {
         $limit = 5;
-        $persons = Person::orderBy('id','DESC')->paginate($limit);
-     
-
-        
+        $persons = Person::orderBy('id', 'DESC')->paginate($limit);
 
         $totalNumberOfPersons = Person::all()->count();
         $totalNumberOfPages = ceil($totalNumberOfPersons / $limit);
@@ -68,10 +65,8 @@ class PersonController extends Controller
 
     public function ajaxListPersons(Request $request)
     {
-     
         $currentPage = $request->query('page');
 
-        
         $ajaxPageLimit = $request->input('ajaxPageLimit');
         $query = $request->input('query');
         $personProperty = $request->input('personProperty');
@@ -89,7 +84,7 @@ class PersonController extends Controller
 
         $offset = $currentPage * $limit;
 
-        $persons = Person::orderBy('id','DESC')->paginate($limit);
+        $persons = Person::orderBy('id', 'DESC')->paginate($limit);
 
         $totalNumberOfPersons = Person::all()->count();
         $totalNumberOfPages = ceil($totalNumberOfPersons / $limit);
@@ -144,7 +139,6 @@ class PersonController extends Controller
 
     public function ajaxSearchAction(Request $request)
     {
-       
         $currentPage = $request->query('page');
         $query = $request->input('query');
         $personProperty = $request->query('personProperty');
@@ -163,20 +157,19 @@ class PersonController extends Controller
         }
 
         $offset = $currentPage * $limit;
-        $persons=NULL;
-        if($query){
+        $persons = null;
+        if ($query) {
             $persons = Person::where(
                 $personProperty,
                 'LIKE',
                 '%' . $query . '%'
             )->paginate($limit);
+        } else {
+            
+            $persons = Person::paginate($limit);
          
-        }else{
-         
-            $persons=Person::all();
         }
-        
-      
+
         $totalNumberOfPersons = DB::table('persons')
             ->where($personProperty, 'LIKE', '%' . $query . '%')
             ->count();
@@ -201,14 +194,15 @@ class PersonController extends Controller
             }
         }
 
-        $lastPage = end($arrayWithPageNumbers);
+        $lastPage = (int)end($arrayWithPageNumbers);
+      
         if ($lastPage == $currentPage) {
             $isLastPage = true;
         } else {
             $isLastPage = false;
         }
 
-        if ($arrayWithPageNumbers['0'] == $currentPage) {
+        if ($arrayWithPageNumbers[0] == $currentPage) {
             $isFirstPage = true;
         } else {
             $isFirstPage = false;
@@ -217,7 +211,7 @@ class PersonController extends Controller
         foreach ($persons as $person) {
             $person->firma = $person->company;
         }
-      
+
         $limits = [1, 2, 5, 10];
         return response()->json([
             'persons' => $persons,
@@ -248,6 +242,7 @@ class PersonController extends Controller
             'telefon' => $request->telefon,
             'handy' => $request->handy,
             'firma' => (int) $request->firma,
+            'photo' => (int) $request->photo,
         ]);
 
         $updatedPerson = Person::find($request->id);
@@ -257,30 +252,27 @@ class PersonController extends Controller
         ]);
     }
 
-
-    public function create(Request $request){
-
+    public function create(Request $request)
+    {
         $person = new Person($request->all());
         $person->save();
 
-        $person=Person::all()->last();
+        $person = Person::all()->last();
 
-        $person->firma=$person->company;
-        
-        return response()->json(
-            ['message'=>'SUCCESS',
-            'latestPerson'=>$person]
-        );
+        $person->firma = $person->company;
 
+        return response()->json([
+            'message' => 'SUCCESS',
+            'latestPerson' => $person,
+        ]);
     }
 
+    public function showPerson($id)
+    {
+        $person = Person::find($id);
 
-    public function showPerson($id){
-      
-        $person=Person::find($id);
-       
         return response()->json([
-            'person'=>$person
+            'person' => $person,
         ]);
     }
 }

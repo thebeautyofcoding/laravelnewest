@@ -18,9 +18,15 @@ class Person extends Model
         'telefon',
         'handy',
         'firma',
+        'photo',
     ];
     public function company()
     {
         return $this->belongsTo('App\Models\Company', 'firma');
+    }
+
+    public function photos()
+    {
+        return $this->belongsTo('App\Models\Photo', 'photo');
     }
 }

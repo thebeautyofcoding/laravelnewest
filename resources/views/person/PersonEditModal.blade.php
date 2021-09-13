@@ -22,7 +22,7 @@
 </div>
       </div>
       <div class="modal-footer">
-        <button type="button" data-id="{{$person->id}}" data-dismiss="modal" data-target="#editPerson{{$person->id}}" class="btn btn-primary updateButton">Save changes</button>
+        <button type="button" data-id="{{$person->id}}" data-dismiss="modal" data-target="#editPerson{{$person->id}}" class="btn btn-primary updateButton">Update</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

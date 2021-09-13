@@ -1,16 +1,21 @@
+
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
+
+
 // Document.ready
-$(function() {
+$(function () {
 
     $(this).on('click', ':button.personPageButton, :button#nextButton, :button#previousButton', function () {
 
         var currentPageNumber = $(this).val();
 
-        
+
         var ajaxPageLimit = $('#ajaxPageLimit').val()
         if ($('#personProperty').val() === '' && $('#searchInput').val() === '') {
 
@@ -34,29 +39,31 @@ $(function() {
                     $('#currentLimit').text(ajaxPageLimit)
 
 
-                   
+
                     $.map(response.persons.data, function (person) {
-                        personHtml = `<tr data-id="${typeof person.id!=='undefined'?person.id:''}" class="tr">
+                        personHtml = `<tr data-id="${typeof person.id !== 'undefined' ? person.id : ''}" class="tr">
 
-
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}?${Math.random()}"/></div>
+          
+                        </td>
                          <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${typeof person.firma.id!=='undefined'?person.firma.id:''}"class="firma">${typeof person.firma.name!=='undefined'?person.firma.name:''}</td>
-                        <td ><button data-id="${typeof person.id!=='undefined'?person.id:''}" data-target="#editPerson${typeof person.id!=='undefined'?person.id:''}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
+                        <td ><button data-id="${typeof person.id !== 'undefined' ? person.id : ''}" data-target="#editPerson${typeof person.id !== 'undefined' ? person.id : ''}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
 
-                        
+
 
                         $('tbody').append(personHtml)
                     })
 
-                   
-    
+
+
 
 
 
@@ -159,14 +166,16 @@ $(function() {
 
                     $.map(response.persons.data, function (person) {
                         personHtml = `<tr data-id="${person.id}" class="tr">
-
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${erson.id}"/></div>
+          
+                        </td>
                          <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${typeof person.firma!==null?person.firma.id: 'kein Firma vorhanden'}"class="firma">${typeof person.firma!==null?person.firma.name: 'kein Firma vorhanden'}</td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
@@ -176,7 +185,7 @@ $(function() {
 
 
                         $('tbody').append(personHtml)
-      
+
                     })
 
 
@@ -238,65 +247,67 @@ $(function() {
 
 
 
-        $('#searchInput').prop('disabled', 'disabled')
-        $('#personProperty').change(function () {
+    $('#searchInput').prop('disabled', 'disabled')
+    $('#personProperty').change(function () {
 
 
-            if ($(this).val() !== '') {
-                $('#searchInput').prop('disabled', false)
-            } else {
-                $('#searchInput').prop('disabled', true)
-            }
-            if ($('#searchInput').val() !== '') {
-                var query = $('#searchInput').val().toLowerCase().trim();
-                var personProperty = $(this).val();
-                var limit = $('#ajaxPageLimit').val();
+        if ($(this).val() !== '') {
+            $('#searchInput').prop('disabled', false)
+        } else {
+            $('#searchInput').prop('disabled', true)
+        }
+        if ($('#searchInput').val() !== '') {
+            var query = $('#searchInput').val().toLowerCase().trim();
+            var personProperty = $(this).val();
+            var limit = $('#ajaxPageLimit').val();
 
-                $.ajax({
-                    url: `personsSearch?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
+            $.ajax({
+                url: `personsSearch?page=${currentPageNumber}&personProperty=${personProperty}&ajaxPageLimit=${ajaxPageLimit}&query=${query}`,
 
-                    method: 'GET',
+                method: 'GET',
 
-                    success: function (response) {
-                        $('.tr').remove()
-                        var tableRows = $(response).find('.tr')
+                success: function (response) {
+                    $('.tr').remove()
+                    var tableRows = $(response).find('.tr')
 
-                        $.map(response.persons.data, function (person) {
-                            personHtml = `<tr data-id="${person.id}" class="tr">
-
+                    $.map(response.persons.data, function (person) {
+                        personHtml = `<tr data-id="${person.id}" class="tr">
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}?${Math.random()}"/></div>
+          
+                        </td>
                          <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
 
 
-           
-
-
-                            $('tbody').append(personHtml)
-                        })
 
 
 
-
-
-
-                        $('#paginationNav').remove()
-                        console.log(response.currentPage)
+                        $('tbody').append(personHtml)
+                    })
 
 
 
 
 
 
+                    $('#paginationNav').remove()
+                    console.log(response.currentPage)
 
-                        var paginationTemplate = `
+
+
+
+
+
+
+                    var paginationTemplate = `
                     {{^onlyOnePage}}
                     <nav id="paginationNav" aria-label="Page navigation example">
                         <ul class="pagination">
@@ -330,19 +341,19 @@ $(function() {
                     </nav>
                 {{/onlyOnePage}}
                 `
-                        var pagintationHtml = Mustache.render(paginationTemplate, response)
-                        console.log(pagintationHtml)
-                        $('#paginationContainer').append(pagintationHtml)
-                        $(`button[value=${response.currentPage}]`).closest('li').addClass('disabled')
+                    var pagintationHtml = Mustache.render(paginationTemplate, response)
+                    console.log(pagintationHtml)
+                    $('#paginationContainer').append(pagintationHtml)
+                    $(`button[value=${response.currentPage}]`).closest('li').addClass('disabled')
 
-                    },
-                    error: function () {
-                        alert("something has gone wrong");
-                    }
-                });
-            }
+                },
+                error: function () {
+                    alert("something has gone wrong");
+                }
+            });
+        }
 
-        })
+    })
 
     $("#searchInput").on("keyup", function () {
 
@@ -350,7 +361,7 @@ $(function() {
         var query = $(this).val().toLowerCase().trim();
         var personProperty = $('#personProperty').val();
         var limit = $('#ajaxPageLimit').val().trim();
-       
+
         $.ajax({
             url: 'personsSearch',
             data: {
@@ -363,17 +374,20 @@ $(function() {
 
             success: function (response) {
                 $('.tr').remove()
-
+                console.log(response)
                 $.map(response.persons.data, function (person) {
+                    
                     personHtml = `<tr data-id="${person.id}" class="tr">
-
+                    <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}?${Math.random()}"/></div>
+          
+                    </td>
                          <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${typeof person.firma!==null?person.firma.id: 'kein Firma vorhanden'}"class="firma">${typeof person.firma!==null?person.firma.name: 'kein Firma vorhanden'}</td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
@@ -383,7 +397,7 @@ $(function() {
 
 
                     $('tbody').append(personHtml)
-                
+
                 })
 
 
@@ -510,21 +524,23 @@ $(function() {
                     paginationHtml = Mustache.render(paginationTemplate, response)
                     $.map(response.persons.data, function (person) {
                         personHtml = `<tr data-id="${person.id}" class="tr">
-
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}?${Math.random()}"/></div>
+          
+                        </td>
                         <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
 
 
-                        
-                      
+
+
 
 
                         $('tbody').append(personHtml)
@@ -605,7 +621,9 @@ $(function() {
                     $('#paginationContainer').append(paginationHtml)
                     $.map(response.persons.data, function (person) {
                         personHtml = `<tr data-id="${person.id}" class="tr">
-
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}?${Math.random()}"/></div>
+          
+                        </td>
                         <td  class="anrede">${person.anrede}</td>
                         <td class="vorname">${person.vorname}</td>
                         <td class="nachname">${person.nachname}</td>
@@ -618,9 +636,9 @@ $(function() {
                         </tr>`
 
 
-             
-                            
-                        
+
+
+
 
                         $('tbody').append(personHtml)
                     })
@@ -692,24 +710,26 @@ $(function() {
 
 
     })
-    
-   
 
-    
+
+
+
     $(this).on('click', '.update', function (e) {
-        e.preventDefault();
-        $('#modal').modal('show');
       
+        $('#modal').modal('show');
+
         var updateButtonId = $(this).data('id')
+        $('#personIdHidden').val(updateButtonId)
+
         var companyId = $(this).parent().siblings('.firma').attr('value');
         var selectMenuHtml;
-  
+
         $('#company').remove()
         $.ajax({
             url: 'companies',
             method: 'GET',
             success: function (response) {
-                 selectMenuHtml = `<select class="form-control" name="companies" id="company">
+                selectMenuHtml = `<select class="form-control" name="companies" id="company">
                 <option value="">Bitte auswählen:</option>`;
 
                 $.each(response.companies, function () {
@@ -718,62 +738,62 @@ $(function() {
 
                 selectMenuHtml = selectMenuHtml + `</select>`
 
-                
+
 
                 $('#companiesSelectMenu').append(selectMenuHtml)
-               
 
-              
-               
+
+
+
             }
 
         })
-        
+
         $.ajax({
-            
+
 
             url: `persons/${updateButtonId}`,
             method: 'GET',
             success: function (response) {
-               
-            $('#modal h5').text(` Editiere ${response.person.vorname} ${response.person.nachname}`)
-            
-            $('#modal-idHidden').val(response.person.id);
-            $('#modal-anrede').val(response.person.anrede);
-            $('#modal-vorname').val(response.person.vorname);
-            $('#modal-nachname').val(response.person.nachname);
-            $('#modal-email').val(response.person.email);
-            $('#modal-telefon').val(response.person.telefon);
-            $('#modal-handy').val(response.person.handy);
-            $('#modal').attr('data-id', response.person.id)
-            $('#modal-updateButton').attr('data-id', response.person.id)  
-  
-     
-         
-      
-            $('#modal').modal('show')
 
-            $(`input[data-id="${updateButtonId}"]`).siblings('#companiesSelectMenu').append(selectMenuHtml)
-            $(`option[value='${companyId}']`).attr('selected', 'selected');
+                $('#modal h5').text(` Editiere ${response.person.vorname} ${response.person.nachname}`)
+
+                $('#modal-idHidden').val(response.person.id);
+                $('#modal-anrede').val(response.person.anrede);
+                $('#modal-vorname').val(response.person.vorname);
+                $('#modal-nachname').val(response.person.nachname);
+                $('#modal-email').val(response.person.email);
+                $('#modal-telefon').val(response.person.telefon);
+                $('#modal-handy').val(response.person.handy);
+                $('#modal').attr('data-id', response.person.id)
+                $('#modal-updateButton').attr('data-id', response.person.id)
+
+
+
+
+                $('#modal').modal('show')
+
+                $(`input[data-id="${updateButtonId}"]`).siblings('#companiesSelectMenu').append(selectMenuHtml)
+                $(`option[value='${companyId}']`).attr('selected', 'selected');
             }
         })
     })
 
     $(this).on('click', '#modal-updateButton', function () {
-        console.log($(this).data('id'))
+        console.log($(this).attr('data-id'))
 
-        personId = $(this).data('id')
-        anrede = $('#modal-anrede').val()
-        vorname = $('#modal-vorname').val()
-        nachname = $('#modal-nachname').val()
+        var personId = $(this).attr('data-id')
+        var anrede = $('#modal-anrede').val()
+        var  vorname = $('#modal-vorname').val()
+        var  nachname = $('#modal-nachname').val()
 
-        email = $('#modal-email').val()
-        telefon = $('#modal-telefon').val()
-        handy = $('#modal-handy').val()
-        firma = $('#company').val()
+        var email = $('#modal-email').val()
+        var  telefon = $('#modal-telefon').val()
+        var   handy = $('#modal-handy').val()
+        var  firma = $('#company').val()
 
-        
-    
+
+
         $.ajax({
             url: 'persons/edit',
             data: {
@@ -785,26 +805,29 @@ $(function() {
                 'telefon': telefon,
                 'handy': handy,
                 'firma': firma,
+                'photo': $('#photoIdHidden').val()
 
             },
             method: 'PATCH',
+      
             success: function (response) {
+                console.log(response)
                 $('body').removeClass('modal-open')
-             $('#modal h5').text(` Editiere ${response.person.vorname} ${response.person.nachname}`)
-            
-            $('#modal-idHidden').val('');
-            $('#modal-anrede').val('');
-            $('#modal-vorname').val('');
-            $('#modal-nachname').val('');
-            $('#modal-email').val('');
-            $('#modal-telefon').val('');
-            $('#modal-handy').val('');
-            $('#modal').attr('data-id', '')
-            $('#modal-updateButton').attr('data-id','')  
+                $('#modal h5').text(``)
+                $('#photoIdHidden').val('')
+                $('#modal-idHidden').val('');
+                $('#modal-anrede').val('');
+                $('#modal-vorname').val('');
+                $('#modal-nachname').val('');
+                $('#modal-email').val('');
+                $('#modal-telefon').val('');
+                $('#modal-handy').val('');
+                $('#modal').attr('data-id', '')
+                $('#modal-updateButton').attr('data-id', '')
                 $('.modal-backdrop').remove()
 
-
-
+                
+                $("tr[data-id='" + personId + "']").find('.foto').html(`<img class=" personPic img-thumbnail" src="/image/show/${response.updatedPerson.id}?${Math.random()}"/>`)
                 $("tr[data-id='" + personId + "']").find('.anrede').html(`${response.updatedPerson.anrede}`)
                 $("tr[data-id='" + personId + "']").find('.vorname').html(`${response.updatedPerson.vorname}`)
                 $("tr[data-id='" + personId + "']").find('.nachname').html(`${response.updatedPerson.nachname}`)
@@ -819,16 +842,19 @@ $(function() {
             }
         })
 
+
+
+
     })
 
-    $(this).on('click', '#createButton', function(){
-        var anrede=$('#anrede').val('')
-        var vorname=$('#vorname').val('')
-        var nachname=$('#nachname').val('')
-        var email=$('#email').val('')
-        var telefon=$('#telefon').val('')
-        var handy=$('#handy').val('')
-        var firma= $('#createPerson').find('#companiesSelectMenu').find('#company').val('')
+    $(this).on('click', '#createButton', function () {
+        var anrede = $('#anrede').val('')
+        var vorname = $('#vorname').val('')
+        var nachname = $('#nachname').val('')
+        var email = $('#email').val('')
+        var telefon = $('#telefon').val('')
+        var handy = $('#handy').val('')
+        var firma = $('#createPerson').find('#companiesSelectMenu').find('#company').val('')
 
         $.ajax({
             url: 'companies',
@@ -853,18 +879,19 @@ $(function() {
     })
 
 
-    $(this).on('click', '#saveNewButton', function(){
-        
-        var anrede=$('#anrede').val()
-        var vorname=$('#vorname').val()
-        var nachname=$('#nachname').val()
-        var email=$('#email').val()
-        var telefon=$('#telefon').val()
-        var handy=$('#handy').val()
-        var firma= $('#createPerson').find('#companiesSelectMenu').find('#company').val()
+    $(this).on('click', '#saveNewButton', function () {
+
+        var anrede = $('#anrede').val()
+        var vorname = $('#vorname').val()
+        var nachname = $('#nachname').val()
+        var email = $('#email').val()
+        var telefon = $('#telefon').val()
+        var handy = $('#handy').val()
+        var firma = $('#createPerson').find('#companiesSelectMenu').find('#company').val()
+
         console.log(vorname)
         $.ajax({
-            url:'persons/create',
+            url: 'persons/create',
             method: 'POST',
             data: {
                 'anrede': anrede,
@@ -876,55 +903,86 @@ $(function() {
                 'firma': firma,
 
             },
-           
+
             success: function (response) {
-                
-              var  latestAddedRowId=$('tbody').find('tr').first()
-              console.log(latestAddedRowId)
-              $('body').removeClass('modal-open')
-             
-              $('.modal-backdrop').remove()
-            
-                
 
-                var person= response.latestPerson
-                
-                    
+                var latestAddedRowId = $('tbody').find('tr').first()
+                console.log(latestAddedRowId)
+                $('body').removeClass('modal-open')
+
+                $('.modal-backdrop').remove()
+
+
+
+                var person = response.latestPerson
+
+
                 personHtml = `<tr class="tr latestRow"data-id="${person.id}" class="tr">
-
+                <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}"/></div>
+          
+                </td>
                 <td  class="anrede">${person.anrede}</td>
                 <td class="vorname">${person.vorname}</td>
                 <td class="nachname">${person.nachname}</td>
                 <td class="email">${person.email}</td>
                 <td class="telefon">${person.telefon}</td>
                 <td class="handy">${person.handy}</td>
-                <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                 <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                 <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                 </tr>`
-              
+
                 $('tbody').find('tr').first().before(personHtml)
-                var textColor= $('tbody').find('tr').first().css('color');
-                var backgroundColor=$('tbody').find('tr').first().css('backgroundColor')
-                
+                var textColor = $('tbody').find('tr').first().css('color');
+                var backgroundColor = $('tbody').find('tr').first().css('backgroundColor')
+
                 $('.latestRow').css({
                     'background-color': 'green',
                     'color': '#fff'
                 });
 
-                setTimeout(function(){ 
+                setTimeout(function () {
 
                     $('.latestRow').css({
                         'background-color': backgroundColor,
-                        'color':textColor 
+                        'color': textColor
                     });
 
                     $('.latestRow').removeClass('.latestRow')
 
-                 }, 500);
-          
-                
+                }, 500);
+
+
             }
         })
     })
+
+
+    $(this).on('mouseover','.imgAndBtnContainer', function(){
+       $(this).find('.imageDeleteBtn').css('display', 'block')
+    })
+
+
+    $(this).on('mouseleave','.imgAndBtnContainer', function(){
+        $(this).find('.imageDeleteBtn').css('display', 'none')
+     })
+
+
+     $(this).on('click', '.imageDeleteBtn', function(){
+         var personId = $(this).data('id')
+
+         $.ajax({
+            cache:false,
+            url:'image/delete',
+            method:'POST',
+            data:{'personId':personId},
+            success:function(response){
+                $("tr[data-id='" + personId + "']").find('.foto').html(`<img class=" personPic img-thumbnail" src="/image/show/${personId}"/>`)
+            }
+        })
+
+
+
+     })
+
 })

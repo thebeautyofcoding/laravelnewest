@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ImageUploadController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,11 +18,7 @@ use App\Http\Controllers\CompanyController;
 Route::get('/persons', [PersonController::class, 'listPersons']);
 Route::get('/personsSearch', [PersonController::class, 'ajaxSearchAction']);
 
-
-
 Route::get('/ajax/persons', [PersonController::class, 'ajaxListPersons']);
-
-
 
 Route::post('/personsDelete', [PersonController::class, 'delete']);
 
@@ -37,20 +34,33 @@ Route::get('/companies/paginate', [CompanyController::class, 'paginate']);
 
 Route::get('/companies/edit/{id}', [CompanyController::class, 'edit']);
 
-
 Route::get('/companies/details/{id}', [CompanyController::class, 'show']);
 
-Route::get('/companies/create', [CompanyController::class, 'create'])->name('company.create');
-Route::post('/companies/store', [CompanyController::class, 'store'])->name('company.store');
-
+Route::get('/companies/create', [CompanyController::class, 'create'])->name(
+    'company.create'
+);
+Route::post('/companies/store', [CompanyController::class, 'store'])->name(
+    'company.store'
+);
 
 Route::post('/companiesDelete', [CompanyController::class, 'destroy']);
-Route::patch('/companies/update', [CompanyController::class, 'update'])->name('company.update');
-
-
-
-
+Route::patch('/companies/update', [CompanyController::class, 'update'])->name(
+    'company.update'
+);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [
+    App\Http\Controllers\HomeController::class,
+    'index',
+])->name('home');
+
+// Route::get('image/upload', 'ImageUploadController@fileCreate');
+Route::post('image/upload/store', [
+    ImageUploadController::class,
+    'fileStore',
+])->name('image.store');
+Route::get('image/show/{id}', [ImageUploadController::class, 'show'])->name(
+    'image.show'
+);
+Route::post('image/delete/', [ImageUploadController::class, 'fileDestroy']);

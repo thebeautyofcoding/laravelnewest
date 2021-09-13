@@ -25,27 +25,30 @@ class CreatePersonsTable extends Migration
             $table
                 ->bigInteger('firma')
                 ->nullable()
-                ->unsigned();
+                ->unsigned()
+                ->index();
+
+            $table
+                ->bigInteger('photo')
+                ->nullable()
+                ->unsigned()
+                ->index();
+
             $table
 
                 ->foreign('firma')
                 ->references('id')
                 ->on('firmen')
-                
+
                 ->onDelete('cascade');
 
-                 $table
-                ->bigInteger('photo')
-                ->nullable()
-                ->unsigned();
             $table
 
-            ->foreign('photo')
-            ->references('id')
-            ->on('photos')
-            
-            ->onDelete('cascade');
-               
+                ->foreign('photo')
+                ->references('id')
+                ->on('photos')
+
+                ->onDelete('cascade');
         });
     }
 
@@ -60,6 +63,8 @@ class CreatePersonsTable extends Migration
             $table->dropForeign('photo');
             $table->dropForeign('firma');
         });
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Schema::dropIfExists('persons');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 class CompanyController extends Controller
 {
-
-
     public function all()
     {
         $companies = Company::all();
@@ -25,13 +23,12 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function paginate(Request $request)
-
     {
         $currentPage = $request->query('page');
         // $ajaxPageLimit = $request->input('ajaxPageLimit');
-        $companies=Company::orderBy('id', 'DESC')->paginate(10);
-       
-        return view('company.companies', ['companies'=>$companies]);
+        $companies = Company::orderBy('id', 'DESC')->paginate(10);
+
+        return view('company.companies', ['companies' => $companies]);
     }
 
     /**
@@ -41,9 +38,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-
-
-       return view('company.create', []);
+        return view('company.create', []);
     }
 
     /**
@@ -54,19 +49,19 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-      $newCompany= new Company([
-        'name'=>$request->name,
-        'unterzeile'=>$request->unterzeile,
-        'strasse'=>$request->strasse,
-        'hausnummer'=>$request->hausnummer,
-        'plz'=>$request->plz,
-        'ort'=>$request->ort,
-        'telefon'=>$request->telefon,
-        'fax'=>$request->fax,
-        'web'=>$request->web,
-      ]);
-      $newCompany->save();
-      return redirect('companies/paginate');
+        $newCompany = new Company([
+            'name' => $request->name,
+            'unterzeile' => $request->unterzeile,
+            'strasse' => $request->strasse,
+            'hausnummer' => $request->hausnummer,
+            'plz' => $request->plz,
+            'ort' => $request->ort,
+            'telefon' => $request->telefon,
+            'fax' => $request->fax,
+            'web' => $request->web,
+        ]);
+        $newCompany->save();
+        return redirect('companies/paginate');
     }
 
     /**
@@ -77,19 +72,17 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-      $company= Company::find($id);
+        $company = Company::find($id);
 
-      $personsWorkingForCompany= $company->person;
+        $personsWorkingForCompany = $company->person;
 
-      
+        $totalPersonCountCompany = $personsWorkingForCompany->count();
 
-      $totalPersonCountCompany=$personsWorkingForCompany->count();
-      
-      return view('company.details',[
-          'persons'=> $personsWorkingForCompany,
-          'company'=>$company,
-          'totalPersons'=>$totalPersonCountCompany
-      ]);
+        return view('company.details', [
+            'persons' => $personsWorkingForCompany,
+            'company' => $company,
+            'totalPersons' => $totalPersonCountCompany,
+        ]);
     }
 
     /**
@@ -100,12 +93,13 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-      $companyToEdit=DB::table('firmen')->where('id', '=', $id)->first();
+        $companyToEdit = DB::table('firmen')
+            ->where('id', '=', $id)
+            ->first();
 
-    
-      return view('company.edit',[
-          'company'=>$companyToEdit
-      ]);
+        return view('company.edit', [
+            'company' => $companyToEdit,
+        ]);
     }
 
     /**
@@ -117,22 +111,18 @@ class CompanyController extends Controller
      */
     public function update(Request $request)
     {
-
-      
-        $person=Company::find($request->id)->update([
-            'name'=>$request->name,
-            'unterzeile'=>$request->unterzeile,
-            'strasse'=>$request->strasse,
-            'hausnummer'=>$request->hausnummer,
-            'plz'=>$request->plz,
-            'ort'=>$request->ort,
-            'telefon'=>$request->telefon,
-            'fax'=>$request->fax,
-            'web'=>$request->web,
+        $person = Company::find($request->id)->update([
+            'name' => $request->name,
+            'unterzeile' => $request->unterzeile,
+            'strasse' => $request->strasse,
+            'hausnummer' => $request->hausnummer,
+            'plz' => $request->plz,
+            'ort' => $request->ort,
+            'telefon' => $request->telefon,
+            'fax' => $request->fax,
+            'web' => $request->web,
         ]);
-       return redirect('companies/paginate');
-   
-     
+        return redirect('companies/paginate');
     }
 
     /**
@@ -147,8 +137,11 @@ class CompanyController extends Controller
             ->whereIn('id', $request->companiesToDelete)
             ->delete();
 
-            return \Response::json([
-                'message' => 'SUCCESS'
-            ], 200); 
+        return \Response::json(
+            [
+                'message' => 'SUCCESS',
+            ],
+            200
+        );
     }
 }

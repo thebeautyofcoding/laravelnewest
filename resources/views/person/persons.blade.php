@@ -8,6 +8,7 @@
 <table id="myTable" class="table table-striped">
   <thead>
     <tr id="trHeader" >
+        <th scope="col">Foto</th>
       <th scope="col">Anrede</th>
       <th scope="col">Vorname</th>
       <th scope="col">Nachname</th>
@@ -24,7 +25,9 @@
   <tbody>
 @foreach($persons as $person)
     <tr class="tr" data-id="{{$person->id}}">
-
+        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="{{$person->id}}">x</button><img class=" personPic img-thumbnail" src="/image/show/{{$person->id}}?{{rand()}}"/></div>
+          
+      </td>
       <td class="anrede">{{$person->anrede}}</td>
       <td class="vorname">{{$person->vorname}}</td>
       <td class="nachname">{{$person->nachname}}</td>
@@ -32,9 +35,9 @@
       <td class="telefon">{{$person->telefon}}</td>
       <td class="handy">{{$person->handy}}</td>
 
-    
+
       <td class="firma" value="{{$person->company->id}}"><a href="companies/details/{{$person->company->id}}">{{$person->company->name}}</a></td>
- 
+
       @auth
       <td><button  type="button" class="btn btn-primary update" data-id="{{$person->id}}" >Updaten</button><td>
    @include('person.PersonEditModal')
@@ -59,7 +62,7 @@
 <nav id="paginationNav" aria-label="Page navigation example">
   <ul class="pagination">
     @if($currentPage===1)
-    
+
     @else
     <li class="page-item"><button id="previousButton" value="{{$previousPage}}" class="page-link">Previous</button></li>
     @endif
@@ -106,9 +109,17 @@
         <div id="companiesSelectMenu">
 
         </div>
-        </div>
+        <form enctype="multipart/form-data" id="imageUpload" action="image/upload/store" method="POST">
+        @csrf
+
+            <div class="dropzone" id="file-dropzone">
+    <input type="hidden" id="photoIdHidden"name="photoId"value="">
+            </div>
+
         <div class="modal-footer">
-            <button type="button" id="modal-updateButton" data-id="" data-dismiss="modal"  class="btn btn-primary ">Save changes</button>
+            <button  type="submit" id="modal-updateButton" data-id="" data-dismiss="modal"  class="btn btn-primary ">Save changes</button>
+   </form>
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
         </div>
