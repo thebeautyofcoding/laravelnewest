@@ -166,7 +166,7 @@ $(function () {
 
                     $.map(response.persons.data, function (person) {
                         personHtml = `<tr data-id="${person.id}" class="tr">
-                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${erson.id}"/></div>
+                        <td class="foto"><div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${person.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${person.id}"/></div>
           
                         </td>
                          <td  class="anrede">${person.anrede}</td>
@@ -630,7 +630,7 @@ $(function () {
                         <td class="email">${person.email}</td>
                         <td class="telefon">${person.telefon}</td>
                         <td class="handy">${person.handy}</td>
-                        <td value="${person.firma.id}"class="firma">${person.firma.name}</td>
+                        <td value="${typeof person.firma.id !== 'undefined' ? person.firma.id : ''}"class="firma"><a href="companies/details/${person.firma.id}">${person.firma.name}</a></td>
                         <td ><button data-id="${person.id}" data-target="#editPerson${person.id}" data-toggle="modal" class="btn btn-primary update">Updaten</button><td>
                         <td ><input class="personsToDeleteCheckbox" type="checkbox" name="personsToDelete" value="${person.id}"></td>
                         </tr>`
@@ -729,7 +729,7 @@ $(function () {
             url: 'companies',
             method: 'GET',
             success: function (response) {
-                selectMenuHtml = `<select class="form-control" name="companies" id="company">
+                selectMenuHtml = `<label for="company">Bitte Firma auswählen:</label><select class="form-control" name="companies" id="company">
                 <option value="">Bitte auswählen:</option>`;
 
                 $.each(response.companies, function () {
@@ -827,17 +827,17 @@ $(function () {
                 $('.modal-backdrop').remove()
 
                 
-                $("tr[data-id='" + personId + "']").find('.foto').html(`<img class=" personPic img-thumbnail" src="/image/show/${response.updatedPerson.id}?${Math.random()}"/>`)
+                $("tr[data-id='" + personId + "']").find('.foto').html(`<div class="imgAndBtnContainer"><button class="btn-sm btn-danger imageDeleteBtn" data-id="${response.updatedPerson.id}">x</button><img class=" personPic img-thumbnail" src="/image/show/${response.updatedPerson.id}?${Math.random()}"/></div>`)
                 $("tr[data-id='" + personId + "']").find('.anrede').html(`${response.updatedPerson.anrede}`)
                 $("tr[data-id='" + personId + "']").find('.vorname').html(`${response.updatedPerson.vorname}`)
                 $("tr[data-id='" + personId + "']").find('.nachname').html(`${response.updatedPerson.nachname}`)
                 $("tr[data-id='" + personId + "']").find('.email').html(`${response.updatedPerson.email}`)
                 $("tr[data-id='" + personId + "']").find('.telefon').html(`${response.updatedPerson.telefon}`)
                 $("tr[data-id='" + personId + "']").find('.handy').html(`${response.updatedPerson.handy}`)
-                $("tr[data-id='" + personId + "']").find('.firma').html(`${response.updatedPerson.firma.name}`)
+                $("tr[data-id='" + personId + "']").find('.firma').html(`<a href="companies/details/${response.updatedPerson.firma.id}">${response.updatedPerson.firma.name}</a></td>`)
 
 
-
+            
 
             }
         })

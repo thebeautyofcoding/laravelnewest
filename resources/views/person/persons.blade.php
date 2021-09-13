@@ -98,21 +98,28 @@
         </div>
         <div class="modal-body">
             <input type="hidden"data-id="{=personId=}" id="modal-idHidden" value="">
+            <label for="modal-anrede">Anrede</label>
             <input type="text" class="form-control mb-3 " id="modal-anrede" value="">
+            <label for="modal-anrede">Vorname</label>
             <input type="text" class="form-control mb-3 " id="modal-vorname" value=''>
+            <label for="modal-anrede">Nachname</label>
             <input type="text" class="form-control mb-3 "id="modal-nachname"   value=''>
+            <label for="modal-anrede">Email</label>
             <input type="text" class="form-control mb-3 " id="modal-email"  value=''>
+            <label for="modal-anrede">Telefon</label>
             <input type="text" class="form-control mb-3 "id="modal-telefon"   value=''>
+            <label for="modal-anrede">Handy</label>
             <input type="text" class="form-control mb-3 "id="modal-handy"  value=''>
 
 
         <div id="companiesSelectMenu">
 
         </div>
+
         <form enctype="multipart/form-data" id="imageUpload" action="image/upload/store" method="POST">
         @csrf
-
-            <div class="dropzone" id="file-dropzone">
+        <label class="mt-5" for="file-dropzone">Image-Upload:</label>
+            <div class="dropzone " id="file-dropzone">
     <input type="hidden" id="photoIdHidden"name="photoId"value="">
             </div>
 
