@@ -5,6 +5,11 @@
 @include('person.personPageLimit')</div>
 
 @include('person.PersonCreateModal')
+
+<div id="errorMessage">
+ 
+   
+</div>
 <table id="myTable" class="table table-striped">
   <thead>
     <tr id="trHeader" >

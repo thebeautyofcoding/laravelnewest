@@ -34,3 +34,27 @@
     display:none;
 
 }
+
+.ulContainer{
+    max-width:300px;
+    background-color: #f9d6d5;
+    display:flex;
+    margin:0 auto;
+    color:grey;
+    border-radius:5px;
+    margin-bottom:20px;
+
+}
+.ulContainer li{
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+
+.ulContainer li:first-child{
+margin-top:12px;
+}
+
+.ulContainer li:last-child{
+    margin-top:12px;
+    }

@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
-
+use Validator;
+use Redirect;
 class PersonController extends Controller
 {
     public function listPersons(Request $request)
@@ -253,8 +254,27 @@ class PersonController extends Controller
     }
 
     public function create(Request $request)
+
+
+
     {
+
+      $validePersonData=$request->validate([
+          'anrede'=>['required'],
+          'vorname'=>['required'],
+          'nachname'=>['required'],
+          'email'=>['required'],
+          'telefon'=>['required'],
+          'handy'=>['required'],
+          'firma'=>['required'],
+      ]);
+
+      
+   
         $person = new Person($request->all());
+
+
+        
         $person->save();
 
         $person = Person::all()->last();

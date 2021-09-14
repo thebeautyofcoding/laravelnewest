@@ -906,6 +906,8 @@ $(function () {
 
             success: function (response) {
 
+                console.log(response)
+
                 var latestAddedRowId = $('tbody').find('tr').first()
                 console.log(latestAddedRowId)
                 $('body').removeClass('modal-open')
@@ -953,7 +955,32 @@ $(function () {
                 }, 500);
 
 
-            }
+            },
+            error:function(response){
+           var  errorMessageLi='';
+           var ul= `<div class=" ulContainer">
+    
+           <ul class="">`
+           console.log(response.responseJSON.errors)
+             $.map(response.responseJSON.errors,function(value, key){
+             errorMessageLi=errorMessageLi+ `
+                 <li class="d-flex justify-content-center"> ${value[0]}  </li>  
+                `  
+             })
+             errorMessageLi=errorMessageLi+` </ul>
+             </div>` 
+           var errorsList=  ul+errorMessageLi
+           $('#errorMessage').append(errorsList)
+           setTimeout(function(){
+            $('.ulContainer').remove()
+           },5000)
+
+           
+ 
+            
+             }
+
+             
         })
     })
 
