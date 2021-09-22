@@ -62,4 +62,23 @@ $(document).ready(function () {
 
 
     })
+    $('#createCompanyButton').attr('disabled', true);
+    $(this).on('keyup', 'input', function(){
+        var trigger = false;
+        $('form input[type="text"]').each(function(){
+
+ 
+            
+            if(!$(this).val()){
+                trigger = true;
+               
+            }
+            trigger? $('#createCompanyButton').attr('disabled', true): $('#createCompanyButton').attr('disabled', false)
+     
+        })
+      
+      
+        })
+       
+  
 })

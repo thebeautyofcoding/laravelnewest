@@ -49,6 +49,8 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $newCompany = new Company([
             'name' => $request->name,
             'unterzeile' => $request->unterzeile,
@@ -111,6 +113,10 @@ class CompanyController extends Controller
      */
     public function update(Request $request)
     {
+
+        
+
+
         $person = Company::find($request->id)->update([
             'name' => $request->name,
             'unterzeile' => $request->unterzeile,

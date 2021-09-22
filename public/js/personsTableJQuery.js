@@ -973,7 +973,7 @@ $(function () {
            $('#errorMessage').append(errorsList)
            setTimeout(function(){
             $('.ulContainer').remove()
-           },5000)
+           },10000)
 
            
  
